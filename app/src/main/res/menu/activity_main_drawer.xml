@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single" android:id="@+id/nav_main">
+        <item
+            android:id="@+id/nav_menu"
+            android:icon="@drawable/ic_baseline_restaurant_24"
+            android:iconTint="@color/white"
+            android:title="Menu" />
+        <item
+            android:id="@+id/nav_orders"
+            android:icon="@drawable/ic_baseline_access_time_24"
+            android:iconTint="@color/white"
+            android:title="Orders" />
+        <item
+            android:id="@+id/admin_mng"
+            android:icon="@drawable/ic_baseline_admin_panel_settings_24"
+            android:iconTint="@color/white"
+            android:title="Admin Management"
+            android:visible="false"/>
+        <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_baseline_person_24"
+            android:iconTint="@color/white"
+            android:title="Profile" />
+        <item
+            android:id="@+id/nav_ratings"
+            android:icon="@drawable/ic_baseline_star_24"
+            android:iconTint="@color/white"
+            android:title="Ratings &amp; Reviews"/>
+        <item
+            android:id="@+id/nav_log_out"
+            android:icon="@drawable/ic_baseline_exit_to_app_24"
+            android:iconTint="@color/white"
+            android:title="Logout" />
+    </group>
+</menu>
