@@ -5,6 +5,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 
 import com.example.capstoneprojectadmin.Common.Common;
 import com.example.capstoneprojectadmin.Model.Admin;
+import com.example.capstoneprojectadmin.Model.EncryptDecrypt;
 import com.example.capstoneprojectadmin.Model.Restaurant;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,8 +29,15 @@ import com.google.firebase.database.ValueEventListener;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.lang.reflect.Array;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 
 public class AdminManagement extends AppCompatActivity {
@@ -52,7 +61,7 @@ public class AdminManagement extends AppCompatActivity {
 
     //Delete Staff Components
     Spinner deleteStaffSpinner;
-
+    String encryptedPassword;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -269,6 +278,7 @@ public class AdminManagement extends AppCompatActivity {
         addNewStaffButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(AdminManagement.this);
                 alertDialog.setTitle("Add New Staff");
                 alertDialog.setMessage("Enter new staff information");
@@ -300,7 +310,18 @@ public class AdminManagement extends AppCompatActivity {
                                     if (snapshot.child(newUsernameTxt.getText().toString()).exists()) {
                                         Toast.makeText(AdminManagement.this, "Username already exist!", Toast.LENGTH_SHORT).show();
                                     } else {
-                                        Admin admin = new Admin(newFullNameTxt.getText().toString(), newPasswordTxt.getText().toString(),
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                            try {
+                                                encryptedPassword = EncryptDecrypt.encrypt(newPasswordTxt.getText().toString());
+                                            } catch (NoSuchPaddingException | NoSuchAlgorithmException |
+                                                     InvalidAlgorithmParameterException |
+                                                     InvalidKeyException |
+                                                     IllegalBlockSizeException |
+                                                     BadPaddingException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                        Admin admin = new Admin(newFullNameTxt.getText().toString(), encryptedPassword,
                                                 newTelNoTxt.getText().toString(), "false");
                                         adminTable.child(newUsernameTxt.getText().toString()).setValue(admin);
                                         Toast.makeText(AdminManagement.this, "Staff registered successfully!", Toast.LENGTH_SHORT).show();

@@ -24,7 +24,7 @@ public class Common {
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kuala_Lumpur"));
         calendar.setTimeInMillis(time);
         int dayCount = calendar.get(Calendar.DAY_OF_WEEK);
-        StringBuilder date = new StringBuilder(DateFormat.format("dd-MM-yyyy HH:mm",calendar).toString());
+        String date = DateFormat.format("dd-MM-yyyy HH:mm", calendar).toString();
         String day = "";
 
         switch(dayCount) {
@@ -50,6 +50,6 @@ public class Common {
                 day = "Sat";
                 break;
         }
-        return day + " " +date.toString();
+        return day + " " + date;
     }
 }

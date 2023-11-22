@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -12,6 +13,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.capstoneprojectadmin.Common.Common;
+import com.example.capstoneprojectadmin.Model.EncryptDecrypt;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,7 +23,14 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 
 import com.example.capstoneprojectadmin.Model.Admin;
 
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+
 import javax.annotation.Nonnull;
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 public class Login extends AppCompatActivity {
 
@@ -33,6 +42,7 @@ public class Login extends AppCompatActivity {
     FirebaseDatabase  database;
     DatabaseReference adminTable;
 
+    String encryptedPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +63,13 @@ public class Login extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    try {
+                        encryptedPassword = EncryptDecrypt.encrypt(passwordText.getText().toString());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
                 if(usernameText.getText().toString().isEmpty() || passwordText.getText().toString().isEmpty()) {
                     Toast.makeText(Login.this, "Both fields must not be empty!", Toast.LENGTH_SHORT).show();
                 } else {
@@ -79,7 +96,7 @@ public class Login extends AppCompatActivity {
                     admin.setAdminTelNo(dataSnapshot.child(username).child("adminTelNo").getValue().toString());
                     admin.setSuperAdmin(dataSnapshot.child(username).child("superAdmin").getValue().toString());
 
-                    if(admin.getAdminPassword().equals(password)){
+                    if(admin.getAdminPassword().equals(encryptedPassword)){
                         Toast.makeText(Login.this, "Login successful!", Toast.LENGTH_SHORT).show();
                         Intent home = new Intent(Login.this,Home.class);
                         Common.currentAdmin = admin;
@@ -87,7 +104,7 @@ public class Login extends AppCompatActivity {
                         finish();
                     }
                     else
-                        Toast.makeText(Login.this, "Wrong password !", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Login.this, "Incorrect password. Please try again.", Toast.LENGTH_SHORT).show();
                 }
                 else {
                     Toast.makeText(Login.this, "Please login with Staff account!", Toast.LENGTH_SHORT).show();
