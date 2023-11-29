@@ -70,10 +70,12 @@ public class Login extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
-                if(usernameText.getText().toString().isEmpty() || passwordText.getText().toString().isEmpty()) {
-                    Toast.makeText(Login.this, "Both fields must not be empty!", Toast.LENGTH_SHORT).show();
-                } else {
-                    loginAdmin(usernameText.getText().toString(), passwordText.getText().toString());
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
+                    if(usernameText.getText().toString().isEmpty() || passwordText.getText().toString().isEmpty()) {
+                        Toast.makeText(Login.this, "Both fields must not be empty!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        loginAdmin(usernameText.getText().toString(), passwordText.getText().toString());
+                    }
                 }
             }
         });
