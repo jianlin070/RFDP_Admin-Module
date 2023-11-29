@@ -1,4 +1,4 @@
-# Restaurant Food Delivery and Pickup (RFDP) Mobile Application (Staff Module)
+# Restaurant Food Delivery and Pickup (RFDP) Mobile Application (Admin Module)
 RFDP is a mobile application developed with Android Studio using Java and Firebase Realtime Database.
 
 ## 🎯Objectives?
