@@ -395,8 +395,19 @@ public class AdminManagement extends AppCompatActivity {
                             adminTable.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                        try {
+                                            encryptedPassword = EncryptDecrypt.encrypt(resetPasswordTxt.getText().toString());
+                                        } catch (NoSuchPaddingException | NoSuchAlgorithmException |
+                                                 InvalidAlgorithmParameterException |
+                                                 InvalidKeyException |
+                                                 IllegalBlockSizeException |
+                                                 BadPaddingException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
                                     adminTable.child(staffSpinner.getSelectedItem().toString()).child("adminPassword").setValue(
-                                            resetPasswordTxt.getText().toString()
+                                            encryptedPassword
                                     );
                                     Toast.makeText(AdminManagement.this, "Password reset successfully!", Toast.LENGTH_SHORT).show();
                                 }
